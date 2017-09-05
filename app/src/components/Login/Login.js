@@ -5,6 +5,7 @@ import './Login.css';
 
 export default class Login extends Component {
     render() {
+        console.log(process.env.REACT_APP_LOGIN)
         return (
             <div> 
                 <div className='App'>  

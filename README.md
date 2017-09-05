@@ -175,6 +175,8 @@ WHERE id = $1;
 
 12. We need to use passport's new Auth0Strategy and set up our domain, clientID, clientSecret, and callbackURL. Login to your auth0.com account to find all the necessary information we need to get started. 
 
+    - You will also need to go into the settings of your app in Auth0, scroll down to the bottom, select  `advanced settings` then `0Auth` and turn off the `OIDC Conformant` in order for your auth0 to work correctly. 
+
     ```
     passport.use(new Auth0Strategy({
         domain: process.env.AUTH_DOMAIN,
