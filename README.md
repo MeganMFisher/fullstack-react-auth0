@@ -177,6 +177,12 @@ WHERE id = $1;
 
     - You will also need to go into the settings of your app in Auth0, scroll down to the bottom, select  `advanced settings` then `0Auth` and turn off the `OIDC Conformant` in order for your auth0 to work correctly. 
 
+    - While we are here in the Allowed Callback URL box on auth0 go ahead and enter in the following: 
+
+        ```
+        http://localhost:3005/auth/callback
+        ```
+
     ```
     passport.use(new Auth0Strategy({
         domain: process.env.AUTH_DOMAIN,
