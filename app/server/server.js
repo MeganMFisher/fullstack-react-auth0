@@ -51,6 +51,37 @@ passport.use(new Auth0Strategy({
     
 }));
 
+passport.serializeUser(function(user, done) {
+  done(null, user);
+});
+
+passport.deserializeUser(function(obj, done) {
+  app.get('db').find_session_user([obj.id])
+  .then( user => {
+    return done(null, user[0]);
+  })
+});
+
+app.get('/auth', passport.authenticate('auth0'));
+
+app.get('/auth/callback', passport.authenticate('auth0', {
+  successRedirect: 'http://localhost:3000/#/private',
+  failureRedirect: 'http://localhost:3000/#/'
+}))
+
+app.get('/auth/me', (req, res, next) => {
+  if (!req.user) {
+    return res.status(404).send('User not found');
+  } else {
+    return res.status(200).send(req.user);
+  }
+})
+
+app.get('/auth/logout', (req, res) => {
+  req.logOut();
+  return res.redirect(302, 'http://localhost:3000/#/');
+})
+
 
 let PORT = 3005;
 app.listen(PORT, () => {

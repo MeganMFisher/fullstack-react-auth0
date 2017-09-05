@@ -54,9 +54,11 @@
 ## Let's setup our server and get it running:
 
 6. Server Setup: 
-    - Go to your package.json and create a main property and have the value point to your server.js file. 
+    - Go to your package.json and create a main property and have the value point to your server.js file and set up your proxy.
     ```
     "main": "server/server.js"
+
+     "proxy": "http://localhost:3005"
     ```
     - In your terminal run: 
     ```
@@ -120,6 +122,31 @@ CREATE TABLE IF NOT EXISTS users (
 )
 ```
 
+- Create a find_user.sql file that will return the user if the id matches. 
+
+```
+SELECT * 
+FROM users
+WHERE users.auth_id = $1;
+```
+
+- Create a create_user.sql file that will create a user. 
+
+```
+INSERT INTO users
+(user_name, email, img, auth_id)
+VALUES
+( $1, $2, $3, $4 )
+RETURNING *;
+```
+
+- Create a find_session_user.sql file that will find the user based off of their id. 
+
+```
+SELECT *
+FROM users
+WHERE id = $1;
+```
 
 
 ## Setup sessions and passport:
@@ -168,7 +195,7 @@ CREATE TABLE IF NOT EXISTS users (
     ```
     function(accessToken, refreshToken, extraParams, profile, done) {
     
-    })
+    }))
     ```
 
     - Inside the function set the app.get('db') to a const variable of db. 
@@ -177,4 +204,30 @@ CREATE TABLE IF NOT EXISTS users (
         const db = app.get('db');
         ```
 
-    - Then make a db call to our user table
+    - Then make a db call to our user table using the find_user query. We will need to pass in information from the profile parameter. In the promise if there will need to be a if statement. If the user is found then return the user. Else we will need to create the user.
+
+        ```
+              db.find_user([ profile.identities[0].user_id ])
+      .then( user => {
+       if ( user[0] ) {
+    
+         return done( null, { id: user[0].id } );
+    
+       } else {
+    
+         db.create_user([profile.displayName, profile.emails[0].value, profile.picture, profile.identities[0].user_id])
+         .then( user => {
+            return done( null, { id: user[0].id } );
+         })
+    
+       }
+      })
+      ``` 
+
+- We need to invoke passort.serializeUser and pass in a callback function as the parameter, the callback function will take in two parameters, user and done. Inside the callback function we need to invoke done by passing in null as the first parameter and user as the second. 
+
+    ```
+    passport.serializeUser(function(user, done) {
+        done(null, user);
+    });
+    ```
