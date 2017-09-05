@@ -325,7 +325,52 @@ WHERE id = $1;
 
 
 6. Let's jump back to the user_reducer and finish setting it up. 
-    - We will be using axios so import that. 
+    - We will be using axios so import that and run the the following in your terminal: 
         ```
+        npm install axios
+
         import axios from 'axios';
+        ```
+
+    - Give our initialState a property of user and the value of an empty object: 
+
+        ```
+        const initialState = {
+            user: {}
+        };
+
+        ```
+    
+    - Set a const variable GET_USER_INFO equal to a string of itself. 
+
+        ``` 
+        const GET_USER_INFO = 'GET_USER_INFO';
+        ```
+    
+    - Let's create our action creator which will get our user information. We will call it getUserInfo(). Set a variable userInfo equal to an axios get request to '/auth/me' then in the promise return the data from that response. Next from your getUserInfo action creator return the type as the variable above and the payload will be the userInfo variable we just made.  
+
+        ```
+        export function getUserInfo() {
+            const userInfo = axios.get('/auth/me').then(res => {
+                return res.data;
+            })
+            return {
+                type: GET_USER_INFO,
+                payload: userInfo
+            }
+        }
+        ```
+
+    - Create a switch statement inside your reducer function which takes in action.type as the parameter. Set the first case to be GET_USER_INFO + '_FULFILLED'. That case will return an Object.assign() with an empty object, state, and an object with the user being the action.payload. Don't forget to default your switch statement. 
+
+        ```
+        export default function reducer(state = initialState, action) {
+            switch (action.type) {
+                case GET_USER_INFO + '_FULFILLED':
+                    return Object.assign({}, state, { user: action.payload });
+                default:
+                    return state;
+            }
+
+        }
         ```
