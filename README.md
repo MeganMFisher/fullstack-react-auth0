@@ -16,7 +16,7 @@
 
 ## Let's get started:
 
-1. Run `create-react-app app` from the route of your project and cd into app. Clean up app.js and app.css.
+1. Run `create-react-app app` from the route of your project and cd into app. Clean up app.js and app.css. Remove everything in the div and all the css and remove the logo import. 
 
 2. Setup folder structure. db, server folders added as siblings to src and public folders that are included with create-react-app. Add server.js file in server folder.
 
@@ -224,10 +224,108 @@ WHERE id = $1;
       })
       ``` 
 
-- We need to invoke passort.serializeUser and pass in a callback function as the parameter, the callback function will take in two parameters, user and done. Inside the callback function we need to invoke done by passing in null as the first parameter and user as the second. 
+- We need to invoke passport.serializeUser and pass in a callback function as the parameter, the callback function will take in two parameters, user and done. Inside the callback function we need to invoke done by passing in null as the first parameter and user as the second. 
 
     ```
     passport.serializeUser(function(user, done) {
         done(null, user);
     });
     ```
+
+- We need to now invoke passport.deserializeUser and pass in a callback function. The callback function will take two parameters, the first is an obj and the second is done. 
+
+
+    ```
+    passport.deserializeUser(function(obj, done) {
+        app.get('db').find_session_user([obj.id])
+        .then( user => {
+            return done(null, user[0]);
+        })
+    });
+    ```
+
+
+- Now make the endpoints: 
+
+    ```
+    app.get('/auth', passport.authenticate('auth0'));
+
+    app.get('/auth/callback', passport.authenticate('auth0', {
+    successRedirect: 'http://localhost:3000/#/private',
+    failureRedirect: 'http://localhost:3000/#/'
+    }))
+
+    app.get('/auth/me', (req, res, next) => {
+    if (!req.user) {
+        return res.status(404).send('User not found');
+    } else {
+        return res.status(200).send(req.user);
+    }
+    })
+
+    app.get('/auth/logout', (req, res) => {
+    req.logOut();
+    return res.redirect(302, 'http://localhost:3000/#/');
+    })
+    ```
+
+
+## Now it's time to jump back to the front end and set up redux. 
+
+1. In your terminal run: 
+
+    ``` 
+    npm install redux react-redux 
+    ```
+
+2. Create a ducks folder in your src folder. Then create a user-reducer.js file in that folder. We need to set up the reducer. 
+
+    ```
+    const initialState = {}
+
+    export default function reducer(state = initialState, action) {
+        return state;
+    }
+    ```
+
+3. Create a store.js file on the same level as your ducks folder. Import createStore from redux and the reducer. Then export the invocation of createStore with the reducer as the only argument. 
+
+    ```
+    import { createStore } from 'redux';
+
+    import user_reducer from './ducks/user_reducer';
+
+    export default createStore(user_reducer);
+    ```
+
+4. In your index.js import Provider from react-redux and the store. Then in the render method wrap <App/> with Provider and pass the stor as a prop to Provider. 
+
+    ```
+    import { Provider } from 'react-redux';
+    import store from './store';
+
+    ReactDOM.render(
+        <Provider store={store}>
+        <App />
+        </Provider>, document.getElementById('root'));
+    registerServiceWorker();
+    ```
+
+5. We need to add applyMiddleware to our store.js. Import it from Redux. Then import promiseMiddleware from react-promise-middleware. In the invocation of createStore we need to have the reducer, and empty object, and applyMiddleware invoked with invoked promiseMiddleware as its parameter. Be sure to npm install redux-promise-middleware in your command line. 
+
+    ```
+    npm install redux-promise-middleware
+
+    import { createStore, applyMiddleware } from 'redux';
+    
+    import promiseMiddleware from 'redux-promise-middleware';
+
+    export default createStore(user_reducer, {}, applyMiddleware(promiseMiddleware()));
+    ```
+
+
+6. Let's jump back to the user_reducer and finish setting it up. 
+    - We will be using axios so import that. 
+        ```
+        import axios from 'axios';
+        ```
