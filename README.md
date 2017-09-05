@@ -106,6 +106,22 @@
     })
     ```
 
+## We need to setup our db table and the calls we will need for auth0
+
+- In your db folder create a users_table_create.sql file where we will create our users table. The table will need to store an id, user_name, email, img, and the auth_id.
+
+```
+CREATE TABLE IF NOT EXISTS users (
+    id SERIAL PRIMARY KEY,
+    user_name VARCHAR(180),
+    email VARCHAR(180),
+    img TEXT,
+    auth_id TEXT
+)
+```
+
+
+
 ## Setup sessions and passport:
 
 10. In your server.js file we need to setup our session so we can use it. Be sure to create a secret in your .env file for your session. 
@@ -130,7 +146,7 @@
 
 ## Setup Auth0: 
 
-12. We need to use passport's new Auth0Strategy and set up our domain, clientID, clientSecret, and callbackURL. 
+12. We need to use passport's new Auth0Strategy and set up our domain, clientID, clientSecret, and callbackURL. Login to your auth0.com account to find all the necessary information we need to get started. 
 
     ```
     passport.use(new Auth0Strategy({
@@ -139,4 +155,26 @@
         clientSecret: process.env.AUTH_CLIENT_SECRET,
         callbackURL: process.env.AUTH_CALLBACK
     }
+
+    .env: 
+    AUTH_DOMAIN=my-auth-domain
+    AUTH_CLIENT_ID=my_auth_client_id
+    AUTH_CLIENT_SECRET=client-secret
+    AUTH_CALLBACK=http://localhost:3005/auth/callback
     ```
+
+- The first parameter new Auth0Strategy takes is an object with the domain, clientID, clientSecret, and callback url. The second parameter it takes is a callback function with the parameters of accessToke, refreshToken, extramParams, profile, and done.
+
+    ```
+    function(accessToken, refreshToken, extraParams, profile, done) {
+    
+    })
+    ```
+
+    - Inside the function set the app.get('db') to a const variable of db. 
+
+        ```
+        const db = app.get('db');
+        ```
+
+    - Then make a db call to our user table
