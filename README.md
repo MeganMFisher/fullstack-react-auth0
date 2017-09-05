@@ -460,3 +460,74 @@ WHERE id = $1;
         ```
 
 
+## Auth Login page:
+
+1. Add a REACT_APP_LOGIN property to your .env file with a value of http://localhost:3005/auth. We will put this on our login button to start the login process. 
+
+    ```
+    REACT_APP_LOGIN=http://localhost:3005/auth
+    ```
+
+
+2. In your Login.js file import the logo from communityBank.svg. 
+
+    ```
+    import logo from './communityBank.svg';
+
+    ```
+
+3. Create a div with a className of App. Inside the div add an img tag with the src of logo. Then add an a tag with an href directed to the REACT_APP_LOGIN in your .env file. The a tags will surround a Login button. 
+
+    ```
+    <div className='App'>  
+        <img src={logo} alt=""/>
+        <a href={ process.env.REACT_APP_LOGIN }><button>Login</button></a>
+    </div> 
+    ```
+
+4. Paste in the following css into your Login.css file. 
+
+    ```
+    @import url('https://fonts.googleapis.com/css?family=Overlock');
+
+    .App {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-direction: column;
+    }
+
+    img {
+    margin: 50px;
+    width: 250px;
+    }
+
+    input {
+    margin-top: 15px;
+    width: 200px;
+    height: 30px;
+    border: none;
+    border-bottom: solid 1px;
+    font-size: 15px;
+    padding-left: 5px;
+    }
+
+    button {
+        margin-top: 15px;
+        width: 175px;
+        height: 40px;
+        border-radius: 5px;
+        background: white;
+        font-size: 20px;
+        font-family: 'Overlock', cursive;
+    }
+    
+    button:focus {
+        outline: none;
+    }
+
+    ```
+
+
+## Hook up the Private.js file: 
+
