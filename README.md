@@ -269,8 +269,90 @@ WHERE id = $1;
     })
     ```
 
+## Set up Routing in our frontend. 
 
-## Now it's time to jump back to the front end and set up redux. 
+1. In your Index.js file in your src folder import HashRouter from react-router-dom. And surround your <App/> with HashRouter tags. Be sure to npm install react-router-dom;
+
+    ```
+    npm install react-router-dom
+
+    import { HashRouter } from 'react-router-dom';
+
+
+    ReactDOM.render(
+        <HashRouter>
+        <App />
+        </HashRouter>
+    , document.getElementById('root'));
+    ```
+
+2. Create our routes. Create a components folder in your src folder. Inside it create one folder called Login and one called Private. Inside Login create a Login.js file and a Login.css file. Inside Private create a Private.js file and a Private.css file. 
+
+
+3. In your Login.js file set it up as a class component. Be sure to import your Login.css file.
+
+    ```
+    import React, { Component } from 'react';
+    import './Login.css';
+
+
+    export default class Login extends Component {
+        render() {
+            return (
+                <div> 
+                    <h1>Login</h1> 
+                </div> 
+            )
+        }
+    }
+    ```
+
+4. In your Private.js file set it up as a class component. Be suer to import your Private.css file. 
+
+
+    ```
+    import React, { Component } from 'react';
+    import './Private.css';
+
+
+    class Private extends Component {
+        render() {
+            return (
+                <div> 
+                    <h1>Private</h1> 
+                </div> 
+            )
+        }
+    }  
+
+    export default Private; 
+    ```
+
+ 5. In your app.js file import route from react-router-dom. Then import out Login and Private components and render them.
+
+    ```
+    import { Route } from 'react-router-dom';
+    import Login from './components/Login/Login';
+    import Private from './components/Private/Private';
+
+
+    class App extends Component {
+        render() {
+            return (
+                <div>
+                <Route component={ Login } path='/' exact />
+                <Route component={ Private } path='/private' />
+                </div> 
+            );
+        }
+    }
+
+
+    ```
+
+
+
+## Set up Redux. 
 
 1. In your terminal run: 
 
@@ -298,7 +380,7 @@ WHERE id = $1;
     export default createStore(user_reducer);
     ```
 
-4. In your index.js import Provider from react-redux and the store. Then in the render method wrap <App/> with Provider and pass the stor as a prop to Provider. 
+4. In your index.js import Provider from react-redux and the store. Then in the render method wrap the HashRouter tags with Provider and pass the stor as a prop to Provider. 
 
     ```
     import { Provider } from 'react-redux';
@@ -306,7 +388,9 @@ WHERE id = $1;
 
     ReactDOM.render(
         <Provider store={store}>
-        <App />
+            <HashRouter>
+                <App />
+            </HashRouter>
         </Provider>, document.getElementById('root'));
     registerServiceWorker();
     ```
@@ -374,3 +458,5 @@ WHERE id = $1;
 
         }
         ```
+
+
