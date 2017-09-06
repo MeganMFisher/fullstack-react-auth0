@@ -5,17 +5,22 @@ import './Login.css';
 
 export default class Login extends Component {
     render() {
-        console.log(process.env.REACT_APP_LOGIN)
         return (
             <div> 
                 <div className='App'>  
                     <img src={logo} alt=""/>
-                    <a href='http://localhost:3005/auth'><button>Login</button></a> 
+                    <a href={process.env.REACT_APP_LOGIN}><button>Login</button></a> 
                 </div> 
             </div> 
         )
     }
 }
+//You have to put your auth0 endpoint into an a tag. A button tag will let a hacker insert javascript and the user thinks they are going to your site but they are actually being redirected by the hacker. A tags will not allow you to do this.  
+
+//.env file
+
+//Proxy. 
+
 
 //Login button hits the middleware it creates a session, initializes passport, uses passport sessions, then hits the passport.use which takes in two parameters 1. new Auth0Strategy which will take your creditials if those are correct it will run the callback function which is the second parameter. 
 

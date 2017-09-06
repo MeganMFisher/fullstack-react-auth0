@@ -39,9 +39,11 @@ passport.use(new Auth0Strategy({
 
       const db = app.get('db') //setting app database connection to the db to a variable that is easier to use. On app there is a get property we are trying to access which has our db on it. 
 
-      console.log(app.get('db')) //Will show you your queries and everything else regarding your db.
+      // console.log(app.get('db')) //Will show you your queries and everything else regarding your db.
 
-      console.log(profile.identities[0].user_id) //To see the individual user id. 
+      console.log(profile.identities[0].user_id) //To see the individual user id. //Will get you the id that will look like this: 1121...... Doesn't have google-0auth2 in front of it. 
+
+      console.log(profile.id) //Will get you the id but it will look like this: google-oauth2|1121.....
     
       db.find_user([ profile.identities[0].user_id ])
       .then( user => {
@@ -71,12 +73,21 @@ passport.serializeUser(function(user, done) {
 
 //Passport does not impose any restrictions on how your user records are stored. Instead, you provide functions to Passport which implements the necessary serialization and deserialization logic. In a typical application, this will be as simple as serializing the user, and finding the user by ID when deserializing.
 
-passport.deserializeUser(function(obj, done) {
-  app.get('db').find_session_user([obj.id])
+passport.deserializeUser(function(user, done) {
+  app.get('db').find_session_user([user.id])
   .then( user => {
+    console.log(user)
     return done(null, user[0]);
   })
 });
+
+//if you just do user and not user[0] you receive the following: 
+//[ anonymous {
+  // id: 1,
+  // user_name: 'name',
+  // email: 'email',
+  // img: 'url',
+  // auth_id: 'id' } ]
 
 // Passport provides an authenticate() function, which is used as route middleware to authenticate requests.
 

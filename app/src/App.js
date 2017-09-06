@@ -9,7 +9,7 @@ class App extends Component {
   render() {
     return (
         <div>
-          <Route component={ Login } path='/' exact />
+          <Route component={ Login }  exact path='/' />
           <Route component={ Private } path='/private' />
         </div> 
     );

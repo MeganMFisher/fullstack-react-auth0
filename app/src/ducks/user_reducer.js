@@ -19,6 +19,8 @@ export function getUserInfo() {
     }
 }
 
+// It is super important that all other endpoints in your frontend are directed to relative paths for axios like about. This will be super important when it comes to hosting. 
+
 //REDUCER FUNCTION
 export default function reducer(state = initialState, action) {
     switch (action.type) {

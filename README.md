@@ -20,7 +20,7 @@
 
 2. Setup folder structure. db, server folders added as siblings to src and public folders that are included with create-react-app. Add server.js file in server folder.
 
-3. Add a .env file to your route as a sibling to your server folder. This will hold what we used to put into our config but we will no use .env instead.
+3. Add a .env file to your route as a sibling to your server folder. This will hold what we used to put into our config but we will no use .env instead. A .env file will make hosting a ton easier. 
 
 4. In your terminal run:  
     ``` 
@@ -484,7 +484,7 @@ WHERE id = $1;
 
     ```
 
-3. Create a div with a className of App. Inside the div add an img tag with the src of logo. Then add an a tag with an href directed to the REACT_APP_LOGIN in your .env file. The a tags will surround a Login button. 
+3. Create a div with a className of App. Inside the div add an img tag with the src of logo. Then add an a tag with an href directed to the REACT_APP_LOGIN in your .env file. The a tags will surround a Login button. **Be sure to restart your frontend so it will pick up your change to the .env file.**  
 
     ```
     <div className='App'>  
