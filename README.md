@@ -626,7 +626,13 @@ WHERE id = $1;
 
 5. Now we need to give each user an available balance. Create an h4 tag. If there is a user on state return $ plus Math.floor((Math.random() + 1) * 100) plus '.00 else return null. 
 
+        - The Math.floor() function returns the largest integer less than or equal to a given number. Rounds it for us. 
 
+        - The Math.random() function returns a random number in the range (0 - 1) but not including 1. 
+
+        - We will add 1 to it to make it a random number over 1. 
+
+        - Then times it by 100 or 100000 if you want more fake money :)
 
         ```
         <h4>Available balance: { this.props.user ? '$' + Math.floor((Math.random() + 1) * 100) + '.00' : null } </h4>
@@ -662,3 +668,5 @@ WHERE id = $1;
             margin-left: 30%;
         }
         ```
+
+### All Done!!
