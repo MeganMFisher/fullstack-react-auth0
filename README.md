@@ -539,3 +539,126 @@ WHERE id = $1;
 
 ## Hook up the Private.js file: 
 
+1. In the Private.js file import axios, connnect from react-redux and getUserInfo from the user_reducer. 
+
+    ```
+    import axios from 'axios';
+    import { connect } from 'react-redux';
+    import { getUserInfo } from './../../ducks/user_reducer';
+    ```
+
+2. Private.js needs to watch for any changes on state to the user object. Right about the export default Private create your mapStateToProps function. Pass in state and return the user property with state.user as the value. 
+
+    ```
+    function mapStateToProps(state) {
+        return {
+            user: state.user
+        }
+    }
+    ```
+
+3. Below the mapStateToProps function we will create an outputActions object that will have the getUserInfo function from out reducer on it. 
+
+    ```
+    let outputActions = {
+        getUserInfo, //getUserInfo = getUserInfo
+     } 
+    ```
+
+4. We need to invoke connect and pass in the mapStateToProps function as the first parameter and then the outputActions object as the second parameter. 
+
+    ```
+    export default connect( mapStateToProps, outputActions)(Private);
+    ```
+
+5. Now we need to invoke our getUserInfo action creater in our reducer. We will be using the componentDidMount lifecycle. Inside we will need to invoke this.props.getUserInfo().
+
+    ```
+    componentDidMount() {
+        this.props.getUserInfo();
+        console.log(this.props.getUserInfo)
+    }
+    ```
+
+
+
+    /////////////////////////////////
+
+
+## Displaying user info on Private.js: 
+
+1. Start by adding an h1 and h4 tag and a couple divs. 
+
+    ```
+    <div>
+        <h1>Community Bank</h1><hr />
+        <div className='accountInfoContainer'>
+            <h4>Account information:</h4>
+                <!-- User Image here -->
+            <div>
+                <!-- User Info here -->
+            </div>
+                <!-- Logout Button here -->
+        </div>
+    </div> 
+    ```
+
+2. We will need to use ternaries to display all the information. If there is a user return an image tag with a className of avatar and the src of this.props.user.img. If there is not an image return null.
+
+        ```
+        { this.props.user ? <img className='avatar' src={this.props.user.img} /> : null }
+        ```
+
+3. Now for the username, same setup as about. If there is a user on props display the this.props.user.user_name if not return null. 
+
+        ```
+        <p>Username: { this.props.user ? this.props.user.user_name : null }</p>
+        ```
+
+4. Same for the email and id: 
+
+        ```
+        <p>Email: { this.props.user ? this.props.user.email : null }</p>
+
+        <p>ID: { this.props.user ? this.props.user.auth_id : null }</p>
+        ```
+
+
+5. Now we need to give each user an available balance. Create an h4 tag. If there is a user on state return $ plus Math.floor((Math.random() + 1) * 100) plus '.00 else return null. 
+
+
+
+        ```
+        <h4>Available balance: { this.props.user ? '$' + Math.floor((Math.random() + 1) * 100) + '.00' : null } </h4>
+        ```
+
+6. Last we need a way to logout of our application. Create an a tag with an href to our logout endpoint that surrounds a logout button. 
+
+        ```
+        <a href='http://localhost:3005/auth/logout'><button>Log out</button></a>
+        ```
+
+7. Now lets do a little styling in Private.css:
+
+        ```
+        .avatar {
+            width: 100px;
+        }
+
+        h1 {
+            margin-left: 50px;
+        }
+
+        .accountInfoContainer {
+            width: 40%;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            border: 1px solid black;
+            padding-top: 20px;
+            padding-bottom: 40px;
+            margin-top: 50px;
+            margin-left: 30%;
+        }
+        ```
