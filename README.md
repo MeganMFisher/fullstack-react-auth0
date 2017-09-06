@@ -539,10 +539,9 @@ WHERE id = $1;
 
 ## Hook up the Private.js file: 
 
-1. In the Private.js file import axios, connnect from react-redux and getUserInfo from the user_reducer. 
+1. In the Private.js file import connnect from react-redux and getUserInfo from the user_reducer. 
 
     ```
-    import axios from 'axios';
     import { connect } from 'react-redux';
     import { getUserInfo } from './../../ducks/user_reducer';
     ```
@@ -606,7 +605,7 @@ WHERE id = $1;
 2. We will need to use ternaries to display all the information. If there is a user return an image tag with a className of avatar and the src of this.props.user.img. If there is not an image return null.
 
         ```
-        { this.props.user ? <img className='avatar' src={this.props.user.img} /> : null }
+        { this.props.user ? <img className='avatar' src={this.props.user.img} alt='account holder' /> : null }
         ```
 
 3. Now for the username, same setup as about. If there is a user on props display the this.props.user.user_name if not return null. 
@@ -638,11 +637,13 @@ WHERE id = $1;
         <h4>Available balance: { this.props.user ? '$' + Math.floor((Math.random() + 1) * 100) + '.00' : null } </h4>
         ```
 
-6. Last we need a way to logout of our application. Create an a tag with an href to our logout endpoint that surrounds a logout button. 
+6. Last we need a way to logout of our application. Create an a tag with an href to our logout endpoint that surrounds a logout button. The endpoint will use req.logout() to end the auth session then will redirect us back to the login page like we specified. 
 
         ```
         <a href='http://localhost:3005/auth/logout'><button>Log out</button></a>
         ```
+
+
 
 7. Now lets do a little styling in Private.css:
 
@@ -670,3 +671,5 @@ WHERE id = $1;
         ```
 
 ### All Done!!
+
+If you check your db your login information will be stored there. 
