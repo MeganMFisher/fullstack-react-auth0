@@ -77,6 +77,7 @@ passport.deserializeUser(function(user, done) {
 });//We could just pass the user on so it gets onto req.user but this time we are going to make a db query to find the session user with the id which has the displayName, email, picture, id of the user and we will put all of that onto the req.user. *Takes it off session and puts it on req.user. 
 
 
+
 // <!-- req.session.passport.user and on req.user --> Its in both places. 
 
 //if you just do user and not user[0] you receive the following: 

@@ -215,18 +215,15 @@ WHERE id = $1;
     - Then make a db call to our user table using the find_user query. We will need to pass in information from the profile parameter. In the promise if there will need to be a if statement. If the user is found then return the user. Else we will need to create the user.
 
         ```
-              db.find_user([ profile.identities[0].user_id ])
-      .then( user => {
-       if ( user[0] ) {
+        db.find_user([ profile.identities[0].user_id ]).then( user => {
+        if ( user[0] ) {
+            return done( null, user );
     
-         return done( null, { id: user[0].id } );
+        } else {
     
-       } else {
-    
-         db.create_user([profile.displayName, profile.emails[0].value, profile.picture, profile.identities[0].user_id])
-         .then( user => {
-            return done( null, { id: user[0].id } );
-         })
+         
+         db.create_user([profile.displayName, profile.emails[0].value, profile.picture, profile.identities[0].user_id]).then( user => {
+            return done( null, user[0] ); 
     
        }
       })
@@ -244,9 +241,8 @@ WHERE id = $1;
 
 
     ```
-    passport.deserializeUser(function(obj, done) {
-        app.get('db').find_session_user([obj.id])
-        .then( user => {
+    passport.deserializeUser(function(user, done) {
+        app.get('db').find_session_user([user[0].id]).then( user => {
             return done(null, user[0]);
         })
     });
