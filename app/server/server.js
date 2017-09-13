@@ -47,7 +47,7 @@ passport.use(new Auth0Strategy({
        } else {    
          db.create_user([profile.displayName, profile.emails[0].value, profile.picture, profile.identities[0].user_id])
          .then( user => {
-            return done( null, user[0] ); // GOES TO SERIALIZE USER //Your endpoints need to know who the user is so done passes it along for you when you enter it in as the second parameter. 
+            return done( null, user[0] ); // GOES TO SERIALIZE USER //Done function works just like next in request level middleware. We invoke it to let passport know we are done and its time for it to go onto the next step. Your endpoints need to know who the user is so done passes it along for you when you enter it in as the second parameter.
          })
        }
       })
@@ -67,7 +67,7 @@ passport.serializeUser(function(user, done) {
 //Passport does not impose any restrictions on how your user records are stored. Instead, you provide functions to Passport which implements the necessary serialization and deserialization logic. In a typical application, this will be as simple as serializing the user, and finding the user by ID when deserializing.
 
 
-//USER COMES FROM SESSION - THIS IS INVOKED FOR EVERY ENDPOINT
+'//USER COMES FROM SESSION - THIS IS INVOKED FOR EVERY ENDPOINT'
 passport.deserializeUser(function(user, done) {
   console.log(user)
   app.get('db').find_session_user([user[0].id]) //<== The id we gave them in our db with the serial primary key.
@@ -118,6 +118,7 @@ app.listen(PORT, () => {
     console.log(`Listening on port: ${PORT}`);
 })   
 
+//documentation for users not enter site. 
 
 //Strategies
 // Passport uses the concept of strategies to authenticate requests. Strategies can range from verifying username and password credentials, delegated authentication using OAuth (for example, via Facebook or Twitter), or federated authentication using OpenID.
