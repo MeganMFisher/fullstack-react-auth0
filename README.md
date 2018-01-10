@@ -229,7 +229,7 @@ WHERE id = $1;
       })
       ``` 
 
-- We need to invoke passport.serializeUser and pass in a callback function as the parameter, the callback function will take in two parameters, user and done. Inside the callback function we need to invoke done by passing in null as the first parameter and user as the second. 
+- We need to invoke passport.serializeUser and pass in a callback function as the parameter, the callback function will take in two parameters, user and done. Inside the callback function we need to invoke done by passing in null as the first parameter and user as the second. The first argument is for errors if you aren't experiencing errors you can just put null. 
 
     ```
     passport.serializeUser(function(user, done) {
