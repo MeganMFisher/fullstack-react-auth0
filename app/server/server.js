@@ -95,8 +95,9 @@ app.get('/auth', passport.authenticate('auth0')); // Login button hits this endp
 
 app.get('/auth/callback', passport.authenticate('auth0', { //Auth0 is going to hit this callback endpoint.
   successRedirect: 'http://localhost:3000/#/private',
-  failureRedirect: 'http://localhost:3000/#/'
-})) //A redirect is commonly issued after authenticating a request. Upon successful authentication, the user will be redirected to the Private page with their account information. If authentication fails, the user will be redirected back to the login page for another attempt.
+  failureRedirect: 'http://localhost:3000/#/',
+  failureFlash : true //Allows flash messages. Setting the failureFlash option to true instructs Passport to flash an error message using the message given by the strategy's verify callback, if any. This is often the best approach, because the verify callback can make the most accurate determination of why authentication failed. You can learn more about this at http://www.passportjs.org/docs/oauth/. Look for the 'Flash Messages' section.
+})) //A redirect is commonly issued after authenticating a request. Upon successful authentication, the user will be redirected to the Private page with their account information. If authentication fails, the user will be redirected back to the login page for another attempt. 
 
 app.get('/auth/me', (req, res, next) => {
   if (!req.user) {
